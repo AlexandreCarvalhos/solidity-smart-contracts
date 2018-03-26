@@ -1,0 +1,60 @@
+pragma solidity ^0.4.0;
+
+contract Vote {
+    
+    //VARIABLES
+    
+    address public owner;
+    ListeBDE[] public Listes;
+    mapping(address => Voteur) public voters;
+    
+    modifier isowner(){
+        if(msg.sender != owner)
+        {
+            revert();
+        }
+        _ ;
+    }
+
+    struct Voteur {
+        int studentID ;
+        address adress ;
+        bool voted;
+        uint vote;
+    }
+    
+    struct ListeBDE{
+        bytes32[] ListeStudentId ;
+        bytes32 name; 
+        uint index;
+        uint voteCount;
+    }
+    
+    function Vote() public {
+         owner = msg.sender ;
+    }
+    
+    function kill() public isowner(){
+        delete owner;
+        selfdestruct(msg.sender);
+    }
+
+    function CreateVoter (address _adress ,int _studentID) public isowner() {
+        voters[msg.sender] = Voteur(_studentID,_adress,false,0) ;
+        
+    }
+    
+    function CreateListeBDE (bytes32[] _ListeStudentId, bytes32 _name, uint _index) public isowner() {
+        Listes.push(ListeBDE(_ListeStudentId,_name,_index,0));
+    }
+    
+    function voter(uint _index) {
+        Voteur sender = voters[msg.sender];
+        if (sender.voted){
+            revert();
+        }
+        sender.voted = true;
+        sender.vote = _index;
+        Listes[_index].voteCount += 1 ;
+    }
+}

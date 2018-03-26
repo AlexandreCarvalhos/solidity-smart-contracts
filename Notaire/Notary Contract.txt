@@ -1,0 +1,13 @@
+pragma solidity ^0.4.18;
+
+contract NotaryAct {
+
+    //VARIABLES 
+    bytes32 hash ;
+
+    //CONSTRUCTOR
+    function NotaryAct(bytes32 _hash){
+    hash = _hash ;
+    
+    }
+}
